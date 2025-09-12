@@ -4,21 +4,18 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetworkService.Helpers;
 
 namespace NetworkService.Model
 {
-    public enum ServerType
-    {
-        WebServer,
-        FileServer,
-        DatabaseServer
-    }
-    public class Server : INotifyPropertyChanged
+
+    public class Server : ValidationBase
     {
         private int id;
         private string name;
         private string ipAddress;
         private ServerType type;
+        private int value;
 
         public int Id
         {
@@ -69,16 +66,64 @@ namespace NetworkService.Model
             }
         }
 
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string propertyName)
+        public ServerType Type
         {
-            if (PropertyChanged != null)
+            get
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                return type;
             }
+            set
+            {
+                if (type != value)
+                {
+                    type = value;
+                    OnPropertyChanged("Type");
+                }
+            }
+        }
+
+        public int Value
+        {
+            get
+            {
+                return value;
+            }
+            set
+            {
+                if (this.value != value)
+                {
+                    this.value = value;
+                    OnPropertyChanged("Value");
+                }
+            }
+        }
+
+        protected override void ValidateSelf()
+        {
+            if(string.IsNullOrWhiteSpace(string.IsNullOrWhiteSpace(Name) ? "" : Name.Trim()))
+            {
+                this.ValidationErrors["Name"] = "Name cannot be empty.";
+            }
+
+            if (string.IsNullOrWhiteSpace(string.IsNullOrWhiteSpace(IpAddress) ? "" : IpAddress.Trim()))
+            {
+                this.ValidationErrors["IpAddress"] = "IP Address cannot be empty.";
+            }
+            else
+            {
+                System.Net.IPAddress ip;
+                if (!System.Net.IPAddress.TryParse(IpAddress, out ip))
+                {
+                    this.ValidationErrors["IpAddress"] = "Invalid IP Address format.";
+                }
+            }
+
+            if (Value < 0)
+            {
+                this.ValidationErrors["Value"] = "Value must be non-negative.";
+            }
+
+
         }
     }
 }

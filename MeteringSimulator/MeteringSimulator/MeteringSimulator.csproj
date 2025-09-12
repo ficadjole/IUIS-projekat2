@@ -35,8 +35,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FontAwesome6.Core, Version=2.5.1.0, Culture=neutral, PublicKeyToken=150287d219411f04, processorArchitecture=MSIL">
+      <HintPath>..\..\NetworkService\NetworkService\packages\FontAwesome6.Svg.2.5.1\lib\net472\FontAwesome6.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FontAwesome6.Shared.Net, Version=2.5.1.0, Culture=neutral, PublicKeyToken=150287d219411f04, processorArchitecture=MSIL">
+      <HintPath>..\..\NetworkService\NetworkService\packages\FontAwesome6.Svg.2.5.1\lib\net472\FontAwesome6.Shared.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="FontAwesome6.Svg.Net, Version=2.5.1.0, Culture=neutral, PublicKeyToken=150287d219411f04, processorArchitecture=MSIL">
+      <HintPath>..\..\NetworkService\NetworkService\packages\FontAwesome6.Svg.2.5.1\lib\net472\FontAwesome6.Svg.Net.dll</HintPath>
+    </Reference>
     <Reference Include="MVVMLight.Messaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\NetworkService\NetworkService\packages\MVVMLight.Messaging.1.0.0.0\lib\net40\MVVMLight.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\NetworkService\NetworkService\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

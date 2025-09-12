@@ -8,32 +8,44 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using NetworkService.Model;
+using System.Data.SqlTypes;
 
 namespace NetworkService.ViewModel
 {
     public class MainWindowViewModel : BindableBase
     {
-        private int count = 15; // Inicijalna vrednost broja objekata u sistemu
+        private int count; // Inicijalna vrednost broja objekata u sistemu
                                 // ######### ZAMENITI stvarnim brojem elemenata
-                                //           zavisno od broja entiteta u listi
+                                //           zavisno od broja entiteta u list
+
         public MyICommand HomeCommand { get; set; }
         public HomeViewModel homeViewModel;
         public BindableBase currentViewModel;
+        
         public MainWindowViewModel()
         {
+            
             createListener(); //Povezivanje sa serverskom aplikacijom
-
+            Messenger.Default.Register<int>(this, SetCount);//ovo sam satvio ovde gore da bi se prvo uradila registracija pa tek onda da se posalje poruka iz NetworkEntitiesViewModel
             HomeCommand = new MyICommand (OnHomeCommand);
 
             homeViewModel = new HomeViewModel();
             SetCurrentView(homeViewModel);
             Messenger.Default.Register<BindableBase>(this, SetCurrentView);
+           
         }
 
         private void SetCurrentView(BindableBase viewModel)
         {
              this.CurrentViewModel = viewModel;
         }
+        private void SetCount(int cnt)
+        {
+            this.count = cnt;
+        }
+
         public BindableBase CurrentViewModel
         {
             get { return currentViewModel; }
@@ -84,6 +96,14 @@ namespace NetworkService.ViewModel
                             //################ IMPLEMENTACIJA ####################
                             // Obraditi poruku kako bi se dobile informacije o izmeni
                             // Azuriranje potrebnih stvari u aplikaciji
+
+                            string[] parts = incomming.Split(':');
+                            string name = parts[0];
+                            int value = Int32.Parse(parts[1]); // Vrednost koju nam je poslao server
+                            int id = Int32.Parse(name.Split('_')[1]); // Izdvajanje ID-a iz imena entiteta
+
+                            // Slanje poruke odgovarajućem ViewModel-u da ažurira stanje entiteta
+                            Messenger.Default.Send<Tuple<int, int>>(new Tuple<int, int>(id, value));
 
                         }
                     }, null);
