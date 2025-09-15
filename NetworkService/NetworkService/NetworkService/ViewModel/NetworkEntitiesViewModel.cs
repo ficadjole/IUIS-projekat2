@@ -136,6 +136,7 @@ namespace NetworkService.ViewModel
 
             Messenger.Default.Register<Tuple<int, int>>(this,updateValue);
 
+            Messenger.Default.Send<ObservableCollection<Server>>(Servers);
         }
 
         private void updateValue(Tuple<int, int> item)
@@ -227,7 +228,9 @@ namespace NetworkService.ViewModel
                 NewServer.IpAddress = string.Empty;
                 NewServer.Type = null; // or any default value
                 NewServer.Value = 0;
+                Messenger.Default.Send<int>(Servers.Count());
 
+                Messenger.Default.Send<ObservableCollection<Server>>(Servers);
             }
 
         }

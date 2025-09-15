@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using NetworkService.Model;
 using System.Data.SqlTypes;
+using System.IO;
 
 namespace NetworkService.ViewModel
 {
@@ -76,7 +77,6 @@ namespace NetworkService.ViewModel
                         int i = stream.Read(bytes, 0, bytes.Length);
                         //Primljena poruka je sacuvana u incomming stringu
                         incomming = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-
                         //Ukoliko je primljena poruka pitanje koliko objekata ima u sistemu -> odgovor
                         if (incomming.Equals("Need object count"))
                         {
@@ -90,6 +90,7 @@ namespace NetworkService.ViewModel
                         }
                         else
                         {
+                            Console.WriteLine("Message received: {0}", count.ToString());
                             //U suprotnom, server je poslao promenu stanja nekog objekta u sistemu
                             Console.WriteLine(incomming); //Na primer: "Entitet_1:272"
 
@@ -102,9 +103,19 @@ namespace NetworkService.ViewModel
                             int value = Int32.Parse(parts[1]); // Vrednost koju nam je poslao server
                             int id = Int32.Parse(name.Split('_')[1]); // Izdvajanje ID-a iz imena entiteta
 
+                            string filePath = @"C:\Users\Filip\Desktop\IUIS-projekat2\NetworkService\NetworkService\NetworkService\Resources\Files\log.txt";
+
+                            // Upis u log fajl
+                            string line = id + "|" + value + "|" + DateTime.Now.ToString("HH:mm");
+
+                            using (StreamWriter write = new StreamWriter(filePath, true))
+                            {
+                                write.WriteLine(line);
+                            }
+
                             // Slanje poruke odgovarajućem ViewModel-u da ažurira stanje entiteta
                             Messenger.Default.Send<Tuple<int, int>>(new Tuple<int, int>(id, value));
-
+                            Messenger.Default.Send<string>(line); // Slanje linije za log fajl
                         }
                     }, null);
                 }

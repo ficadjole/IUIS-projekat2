@@ -72,10 +72,12 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\BindableBase.cs" />
     <Compile Include="Helpers\MyICommand.cs" />
+    <Compile Include="Helpers\ReadLogFile.cs" />
     <Compile Include="Helpers\ValidationBase.cs" />
     <Compile Include="Helpers\ValidationErrors.cs" />
     <Compile Include="Model\Server.cs" />
     <Compile Include="Model\ServerType.cs" />
+    <Compile Include="Model\TrougaoPodaci.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\MeasurementGraphViewModel.cs" />
@@ -153,6 +155,9 @@
     <Resource Include="Resources\Images\DatabaseServer.png" />
     <Resource Include="Resources\Images\FileServer.png" />
     <Resource Include="Resources\Images\WebServer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Files\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

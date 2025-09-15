@@ -23,9 +23,9 @@ namespace NetworkService.ViewModel
             NavCommand = new MyICommand<string>(OnNav);
 
             //homeViewModel = new HomeViewModel();
+            measurementGraphViewModel = new MeasurementGraphViewModel();
             networkDisplayViewModel = new NetworkDisplayViewModel();
             networkEntitiesViewModel = new NetworkEntitiesViewModel();
-            measurementGraphViewModel = new MeasurementGraphViewModel();
             CurrentViewModel = this;
         }
         public BindableBase CurrentViewModel
