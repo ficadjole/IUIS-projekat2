@@ -12,6 +12,13 @@ namespace NetworkService.Model
     {
         private double visina;
         private Brush boja;
+        private string vreme;
+
+        public string Vreme
+        {
+            get { return vreme; }
+            set { SetProperty(ref vreme, value); }
+        }
 
         public double Visina
         {

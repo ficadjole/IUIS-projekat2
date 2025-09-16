@@ -76,6 +76,7 @@
     <Compile Include="Helpers\ValidationBase.cs" />
     <Compile Include="Helpers\ValidationErrors.cs" />
     <Compile Include="Model\Server.cs" />
+    <Compile Include="Model\ServersByType.cs" />
     <Compile Include="Model\ServerType.cs" />
     <Compile Include="Model\TrougaoPodaci.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />

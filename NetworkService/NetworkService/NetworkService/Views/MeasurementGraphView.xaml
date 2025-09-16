@@ -64,17 +64,19 @@
                     ItemsSource="{Binding Podaci}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Width="300" Orientation="Horizontal" />
+                            <StackPanel Orientation="Horizontal" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle
-                                Width="50"
-                                Height="{Binding Visina}"
-                                Margin="5"
-                                Fill="{Binding Boja}" />
+                            <StackPanel Orientation="Vertical">
+                                <Rectangle
+                                    Width="50"
+                                    Height="{Binding Visina}"
+                                    Margin="5"
+                                    Fill="{Binding Boja}" />
+                            </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -85,76 +87,59 @@
                     Canvas.Top="0"
                     Content="100"
                     FontWeight="Bold"
-                    Foreground="White" />
+                    Foreground="Black" />
 
                 <Label
                     Canvas.Left="5"
                     Canvas.Top="150"
                     Content="75"
                     FontWeight="Bold"
-                    Foreground="White" />
+                    Foreground="Black" />
 
                 <Label
                     Canvas.Left="5"
                     Canvas.Top="310"
                     Content="50"
                     FontWeight="Bold"
-                    Foreground="White" />
+                    Foreground="Black" />
 
                 <Label
                     Canvas.Left="5"
                     Canvas.Top="460"
                     Content="25"
                     FontWeight="Bold"
-                    Foreground="White" />
+                    Foreground="Black" />
 
                 <Label
                     Canvas.Left="5"
                     Canvas.Top="615"
                     Content="0"
                     FontWeight="Bold"
-                    Foreground="White" />
+                    Foreground="Black" />
 
-                <StackPanel
+                <ItemsControl
                     Canvas.Left="50"
                     Canvas.Top="625"
-                    Orientation="Horizontal">
-                    <Label
-                        Width="50"
-                        Margin="5"
-                        HorizontalContentAlignment="Center"
-                        Content="T"
-                        FontWeight="Bold"
-                        Foreground="Black" />
-                    <Label
-                        Width="50"
-                        Margin="5"
-                        HorizontalContentAlignment="Center"
-                        Content="T"
-                        FontWeight="Bold"
-                        Foreground="Black" />
-                    <Label
-                        Width="50"
-                        Margin="5"
-                        HorizontalContentAlignment="Center"
-                        Content="T"
-                        FontWeight="Bold"
-                        Foreground="Black" />
-                    <Label
-                        Width="50"
-                        Margin="5"
-                        HorizontalContentAlignment="Center"
-                        Content="T"
-                        FontWeight="Bold"
-                        Foreground="Black" />
-                    <Label
-                        Width="50"
-                        Margin="5"
-                        HorizontalContentAlignment="Center"
-                        Content="T"
-                        FontWeight="Bold"
-                        Foreground="Black" />
-                </StackPanel>
+                    ItemsSource="{Binding Podaci}">
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Label
+                                Width="50"
+                                Margin="5"
+                                HorizontalContentAlignment="Center"
+                                Content="{Binding Vreme}"
+                                FontWeight="Bold"
+                                Foreground="Black" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </Canvas>
         </Grid>
     </Grid>
