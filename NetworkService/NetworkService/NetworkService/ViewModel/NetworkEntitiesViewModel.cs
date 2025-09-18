@@ -238,9 +238,9 @@ namespace NetworkService.ViewModel
         {
             EntityTypes = new ObservableCollection<ServerType>();
 
-            EntityTypes.Add(new ServerType { Type = Type.FileServer, UrlImage = @"\Resources\Images\FileServer.png" });
-            EntityTypes.Add(new ServerType { Type = Type.DatabaseServer, UrlImage = @"\Resources\Images\DatabaseServer.png" });
-            EntityTypes.Add(new ServerType { Type = Type.WebServer, UrlImage = @"\Resources\Images\WebServer.png" });
+            EntityTypes.Add(new ServerType { Type = Type.FileServer, UrlImage = @"..\..\Resources\Images\FileServer.png" });
+            EntityTypes.Add(new ServerType { Type = Type.DatabaseServer, UrlImage = @"..\..\Resources\Images\DatabaseServer.png" });
+            EntityTypes.Add(new ServerType { Type = Type.WebServer, UrlImage = @"..\..\Resources\Images\WebServer.png" });
 
 
             Servers = new ObservableCollection<Server>();
@@ -250,7 +250,7 @@ namespace NetworkService.ViewModel
                 Id = 0,
                 Name = "Entity_0",
                 IpAddress = "192.168.0.10",
-                Type = new ServerType { Type = Type.FileServer, UrlImage = @"\Resources\Images\FileServer.png" },
+                Type = new ServerType { Type = Type.FileServer, UrlImage = @"..\..\Resources\Images\FileServer.png" },
                 Value = 20
             });
 
@@ -259,7 +259,7 @@ namespace NetworkService.ViewModel
                 Id = 1,
                 Name = "Entity_1",
                 IpAddress = "192.168.0.11",
-                Type = new ServerType { Type = Type.DatabaseServer, UrlImage = @"\Resources\Images\DatabaseServer.png" },
+                Type = new ServerType { Type = Type.DatabaseServer, UrlImage = @"..\..\Resources\Images\DatabaseServer.png" },
                 Value = 35
             });
 
@@ -268,7 +268,7 @@ namespace NetworkService.ViewModel
                 Id = 2,
                 Name = "Entity_2",
                 IpAddress = "192.168.0.12",
-                Type = new ServerType { Type = Type.WebServer, UrlImage = @"\Resources\Images\WebServer.png" },
+                Type = new ServerType { Type = Type.WebServer, UrlImage = @"..\..\Resources\Images\WebServer.png" },
                 Value = 50
             });
 
@@ -277,7 +277,7 @@ namespace NetworkService.ViewModel
                 Id = 3,
                 Name = "Entity_3",
                 IpAddress = "192.168.0.13",
-                Type = new ServerType { Type = Type.FileServer, UrlImage = @"\Resources\Images\FileServer.png" },
+                Type = new ServerType { Type = Type.FileServer, UrlImage = @"..\..\Resources\Images\FileServer.png" },
                 Value = 15
             });
 
@@ -286,7 +286,7 @@ namespace NetworkService.ViewModel
                 Id = 4,
                 Name = "Entity_4",
                 IpAddress = "192.168.0.14",
-                Type = new ServerType { Type = Type.DatabaseServer, UrlImage = @"\Resources\Images\DatabaseServer.png" },
+                Type = new ServerType { Type = Type.DatabaseServer, UrlImage = @"..\..\Resources\Images\DatabaseServer.png" },
                 Value = 60
             });
 
@@ -295,7 +295,7 @@ namespace NetworkService.ViewModel
                 Id = 5,
                 Name = "Entity_5",
                 IpAddress = "192.168.0.15",
-                Type = new ServerType { Type = Type.WebServer, UrlImage = @"\Resources\Images\WebServer.png" },
+                Type = new ServerType { Type = Type.WebServer, UrlImage = @"..\..\Resources\Images\WebServer.png" },
                 Value = 42
             });
 
@@ -304,7 +304,7 @@ namespace NetworkService.ViewModel
                 Id = 6,
                 Name = "Entity_6",
                 IpAddress = "192.168.0.16",
-                Type = new ServerType { Type = Type.FileServer, UrlImage = @"\Resources\Images\FileServer.png" },
+                Type = new ServerType { Type = Type.FileServer, UrlImage = @"..\..\Resources\Images\FileServer.png" },
                 Value = 10
             });
 
@@ -313,7 +313,7 @@ namespace NetworkService.ViewModel
                 Id = 7,
                 Name = "Entity_7",
                 IpAddress = "192.168.0.17",
-                Type = new ServerType { Type = Type.DatabaseServer, UrlImage = @"\Resources\Images\DatabaseServer.png" },
+                Type = new ServerType { Type = Type.DatabaseServer, UrlImage = @"..\..\Resources\Images\DatabaseServer.png" },
                 Value = 77
             });
 
@@ -322,7 +322,7 @@ namespace NetworkService.ViewModel
                 Id = 8,
                 Name = "Entity_8",
                 IpAddress = "192.168.0.18",
-                Type = new ServerType { Type = Type.WebServer, UrlImage = @"\Resources\Images\WebServer.png" },
+                Type = new ServerType { Type = Type.WebServer, UrlImage = @"..\..\Resources\Images\WebServer.png" },
                 Value = 31
             });
 
@@ -331,7 +331,7 @@ namespace NetworkService.ViewModel
                 Id = 9,
                 Name = "Entity_9",
                 IpAddress = "192.168.0.19",
-                Type = new ServerType { Type = Type.FileServer, UrlImage = @"\Resources\Images\FileServer.png" },
+                Type = new ServerType { Type = Type.FileServer, UrlImage = @"..\..\Resources\Images\FileServer.png" },
                 Value = 28
             });
 
@@ -340,7 +340,7 @@ namespace NetworkService.ViewModel
                 Id = 10,
                 Name = "Entity_10",
                 IpAddress = "192.168.0.20",
-                Type = new ServerType { Type = Type.DatabaseServer, UrlImage = @"\Resources\Images\DatabaseServer.png" },
+                Type = new ServerType { Type = Type.DatabaseServer, UrlImage = @"..\..\Resources\Images\DatabaseServer.png" },
                 Value = 55
             });
 
@@ -349,7 +349,7 @@ namespace NetworkService.ViewModel
                 Id = 12,
                 Name = "Entity_11",
                 IpAddress = "192.168.0.21",
-                Type = new ServerType { Type = Type.WebServer, UrlImage = @"\Resources\Images\WebServer.png" },
+                Type = new ServerType { Type = Type.WebServer, UrlImage = @"..\..\Resources\Images\WebServer.png" },
                 Value = 18
             });
 
@@ -358,7 +358,7 @@ namespace NetworkService.ViewModel
                 Id = 12,
                 Name = "Entity_12",
                 IpAddress = "192.168.0.22",
-                Type = new ServerType { Type = Type.FileServer, UrlImage = @"\Resources\Images\FileServer.png" },
+                Type = new ServerType { Type = Type.FileServer, UrlImage = @"..\..\Resources\Images\FileServer.png" },
                 Value = 63
             });
 
@@ -367,7 +367,7 @@ namespace NetworkService.ViewModel
                 Id = 13,
                 Name = "Entity_13",
                 IpAddress = "192.168.0.23",
-                Type = new ServerType { Type = Type.DatabaseServer, UrlImage = @"\Resources\Images\DatabaseServer.png" },
+                Type = new ServerType { Type = Type.DatabaseServer, UrlImage = @"..\..\Resources\Images\DatabaseServer.png" },
                 Value = 47
             });
 
@@ -376,7 +376,7 @@ namespace NetworkService.ViewModel
                 Id = 14,
                 Name = "Entity_14",
                 IpAddress = "192.168.0.24",
-                Type = new ServerType { Type = Type.WebServer, UrlImage = @"\Resources\Images\WebServer.png" },
+                Type = new ServerType { Type = Type.WebServer, UrlImage = @"..\..\Resources\Images\WebServer.png" },
                 Value = 39
             });
 

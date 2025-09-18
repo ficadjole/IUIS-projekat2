@@ -9,7 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Interactivity;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Type = NetworkService.Model.Type;
 
 namespace NetworkService.ViewModel
@@ -42,60 +43,94 @@ namespace NetworkService.ViewModel
 
         public MyICommand MouseLeftButtonUpCommand { get; set; }
         public MyICommand<object> SelectedItemChangedCommand { get; set; }
-        public MyICommand<Point> CanvasDropCommand { get; set; }
+        
+        public MyICommand<object> DragOverCommand { get; set; }
+
+        public MyICommand<object> DropCommand { get; set; }
 
         private ObservableCollection<Server> CanvasServers { get; set; }
         public NetworkDisplayViewModel()
         {
             
-            dataBase = new ServersByType() { Servers = new ObservableCollection<Server>(), ServerType = new ServerType { Type = Type.DatabaseServer, UrlImage = @"\Resources\Images\DatabaseServer.png" } };
-            web = new ServersByType() { Servers = new ObservableCollection<Server>(), ServerType = new ServerType { Type = Type.WebServer, UrlImage = @"\Resources\Images\WebServer.png" } };
-            file = new ServersByType() { Servers = new ObservableCollection<Server>(), ServerType = new ServerType { Type = Type.FileServer, UrlImage = @"\Resources\Images\FileServer.png" } };
+            dataBase = new ServersByType() { Servers = new ObservableCollection<Server>(), ServerType = new ServerType { Type = Type.DatabaseServer, UrlImage = @"..\..\Resources\Images\DatabaseServer.png" } };
+            web = new ServersByType() { Servers = new ObservableCollection<Server>(), ServerType = new ServerType { Type = Type.WebServer, UrlImage = @"..\..\Resources\Images\WebServer.png" } };
+            file = new ServersByType() { Servers = new ObservableCollection<Server>(), ServerType = new ServerType { Type = Type.FileServer, UrlImage = @"..\..\Resources\Images\FileServer.png" } };
             SviServeri = new ObservableCollection<ServersByType>();
             CanvasServers = new ObservableCollection<Server>();
             Messenger.Default.Register<ObservableCollection<Server>>(this, LoadServers);
         
             MouseLeftButtonUpCommand = new MyICommand(OnMouseLeftButtonUp);
             SelectedItemChangedCommand = new MyICommand<object>(OnSelectedItemChanged);
-            CanvasDropCommand = new MyICommand<Point>(OnCanvasDrop);
+            DragOverCommand = new MyICommand<object>(OnDragOverCommand);
+            DropCommand = new MyICommand<object>(OnDropCommand);
 
         }
 
-
-        private void OnCanvasDrop(Point point)
+        private void OnDropCommand(object obj)
         {
-            if (DraggedItem != null)
-            {
-                // Dodaj item u Canvas kolekciju
-                CanvasServers.Add(DraggedItem);
+            Canvas canvas = (obj as DragEventArgs).Source as Canvas;
+            TextBlock textBlock = (TextBlock)(canvas.Children[0]);
 
-                // Ukloni item iz TreeView kolekcije
-                foreach (var sbt in SviServeri)
+            if(DraggedItem != null)
+            {
+                if (canvas.Resources["taken"] == null)
                 {
-                    if (sbt.Servers.Contains(DraggedItem))
-                    {
-                        sbt.Servers.Remove(DraggedItem);
-                        break;
-                    }
+                    BitmapImage image = new BitmapImage();
+                    image.BeginInit();
+                    image.UriSource = new Uri(DraggedItem.Type.UrlImage, UriKind.Relative);
+                    image.EndInit();
+                    canvas.Background = new ImageBrush(image);
+                    textBlock.Text = DraggedItem.Name +"-"+ DraggedItem.Value;
+                    canvas.Resources.Add("token", true);
+                    CanvasServers.Add(DraggedItem);
+                    
+                    //Dodati brisanje iz liste
+
+                }
+                ResetDragState();
+            }
+
+            (obj as DragEventArgs).Handled = true;
+        }
+
+        private void OnDragOverCommand(object obj)
+        {
+            Canvas canvas = (obj as DragEventArgs).Source as Canvas;
+
+            if(canvas != null)
+            {
+                if (canvas.Resources["taken"] != null)
+                {
+                    (obj as DragEventArgs).Effects = DragDropEffects.None;
+                }
+                else
+                {
+                    (obj as DragEventArgs).Effects = DragDropEffects.Move;
                 }
 
-                DraggedItem = null; // reset
+                (obj as DragEventArgs).Handled = true;
             }
+
+
         }
 
         private void OnSelectedItemChanged(object e)
         {
-            var selectedItem = e as Server;
-            if (!isDragging && selectedItem.GetType() != typeof(Server))
-            {
-                DraggedItem = selectedItem;
-                isDragging = true;
-                DraggedItem = selectedItem;
-                draggedItemIndex = SviServeri.SelectMany(sbt => sbt.Servers).ToList().IndexOf(DraggedItem);
-                    
-            }
-        }
+            var selectedItem = (e as RoutedPropertyChangedEventArgs<object>).NewValue as Server;
+            var treeView = (e as RoutedPropertyChangedEventArgs<object>).Source as TreeView;
+            if (selectedItem != null) {
+                if (!isDragging && selectedItem.GetType() == typeof(Server))
+                {
+                    isDragging = true;
+                    DraggedItem = selectedItem;
+                    draggedItemIndex = SviServeri.SelectMany(sbt => sbt.Servers).ToList().IndexOf(DraggedItem);
+                    DragDrop.DoDragDrop(treeView, DraggedItem, DragDropEffects.Move | DragDropEffects.Copy);
 
+                }
+            }
+
+        }
+       
         private void OnMouseLeftButtonUp()
         {
             ResetDragState();

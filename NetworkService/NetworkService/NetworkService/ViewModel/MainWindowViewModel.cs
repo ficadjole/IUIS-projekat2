@@ -90,7 +90,6 @@ namespace NetworkService.ViewModel
                         }
                         else
                         {
-                            Console.WriteLine("Message received: {0}", count.ToString());
                             //U suprotnom, server je poslao promenu stanja nekog objekta u sistemu
                             Console.WriteLine(incomming); //Na primer: "Entitet_1:272"
 

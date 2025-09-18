@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:NetworkService.Views"
     xmlns:local1="clr-namespace:NetworkService.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -47,17 +47,16 @@
                         <TextBlock Text="{Binding Name}" />
                         <TextBlock Text=" - " />
                         <TextBlock Text="{Binding IpAddress}" />
-
                     </StackPanel>
                 </DataTemplate>
             </TreeView.Resources>
 
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseLeftButtonUp">
-                    <i:InvokeCommandAction Command="{Binding MouseLeftButtonUpCommand}" />
-                </i:EventTrigger>
                 <i:EventTrigger EventName="SelectedItemChanged">
-                    <local1:AssociatedObjectPristup Command="{Binding SelectedItemChangedCommand}" />
+                    <i:InvokeCommandAction Command="{Binding SelectedItemChangedCommand}" PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseLeftBuutonUp">
+                    <i:InvokeCommandAction Command="{Binding MouseLeftButtonUpCommand}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </TreeView>
@@ -85,12 +84,19 @@
                 Width="80"
                 Height="80"
                 AllowDrop="True"
-                Background="AliceBlue"
-                DockPanel.Dock="Top">
-                <TextBlock Canvas.Top="60" Text="Router" />
-                <i:Interaction.Behaviors>
-                    <local1:CanvasBehavior DropCommand="{Binding CanvasDropCommand}" />
-                </i:Interaction.Behaviors>
+                Background="AliceBlue">
+                <TextBlock
+                    Canvas.Top="80"
+                    FontWeight="Bold"
+                    Text="Router" />
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DragOver">
+                        <i:InvokeCommandAction Command="{Binding DragOverCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <i:InvokeCommandAction Command="{Binding DropCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </Canvas>
 
             <Canvas
@@ -98,74 +104,228 @@
                 Grid.Column="0"
                 Width="80"
                 Height="80"
-                Background="AliceBlue" />
+                AllowDrop="True"
+                Background="AliceBlue">
+                <TextBlock
+                    Canvas.Top="80"
+                    FontWeight="Bold"
+                    Text="Router" />
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DragOver">
+                        <i:InvokeCommandAction Command="{Binding DragOverCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <i:InvokeCommandAction Command="{Binding DropCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Canvas>
             <Canvas
                 Grid.Row="2"
                 Grid.Column="0"
                 Width="80"
                 Height="80"
-                Background="AliceBlue" />
+                AllowDrop="True"
+                Background="AliceBlue">
+                <TextBlock
+                    Canvas.Top="80"
+                    FontWeight="Bold"
+                    Text="Router" />
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DragOver">
+                        <i:InvokeCommandAction Command="{Binding DragOverCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <i:InvokeCommandAction Command="{Binding DropCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Canvas>
 
             <Canvas
                 Grid.Row="0"
                 Grid.Column="1"
                 Width="80"
                 Height="80"
-                Background="AliceBlue" />
+                AllowDrop="True"
+                Background="AliceBlue">
+                <TextBlock
+                    Canvas.Top="80"
+                    FontWeight="Bold"
+                    Text="Router" />
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DragOver">
+                        <i:InvokeCommandAction Command="{Binding DragOverCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <i:InvokeCommandAction Command="{Binding DropCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Canvas>
 
             <Canvas
                 Grid.Row="1"
                 Grid.Column="1"
                 Width="80"
                 Height="80"
-                Background="AliceBlue" />
+                AllowDrop="True"
+                Background="AliceBlue">
+                <TextBlock
+                    Canvas.Top="80"
+                    FontWeight="Bold"
+                    Text="Router" />
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DragOver">
+                        <i:InvokeCommandAction Command="{Binding DragOverCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <i:InvokeCommandAction Command="{Binding DropCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Canvas>
 
             <Canvas
                 Grid.Row="2"
                 Grid.Column="1"
                 Width="80"
                 Height="80"
-                Background="AliceBlue" />
+                AllowDrop="True"
+                Background="AliceBlue">
+                <TextBlock
+                    Canvas.Top="80"
+                    FontWeight="Bold"
+                    Text="Router" />
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DragOver">
+                        <i:InvokeCommandAction Command="{Binding DragOverCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <i:InvokeCommandAction Command="{Binding DropCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Canvas>
 
             <Canvas
                 Grid.Row="0"
                 Grid.Column="2"
                 Width="80"
                 Height="80"
-                Background="AliceBlue" />
+                AllowDrop="True"
+                Background="AliceBlue">
+                <TextBlock
+                    Canvas.Top="80"
+                    FontWeight="Bold"
+                    Text="Router" />
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DragOver">
+                        <i:InvokeCommandAction Command="{Binding DragOverCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <i:InvokeCommandAction Command="{Binding DropCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Canvas>
             <Canvas
                 Grid.Row="1"
                 Grid.Column="2"
                 Width="80"
                 Height="80"
-                Background="AliceBlue" />
+                AllowDrop="True"
+                Background="AliceBlue">
+                <TextBlock
+                    Canvas.Top="80"
+                    FontWeight="Bold"
+                    Text="Router" />
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DragOver">
+                        <i:InvokeCommandAction Command="{Binding DragOverCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <i:InvokeCommandAction Command="{Binding DropCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Canvas>
             <Canvas
                 Grid.Row="2"
                 Grid.Column="2"
                 Width="80"
                 Height="80"
-                Background="AliceBlue" />
+                AllowDrop="True"
+                Background="AliceBlue">
+                <TextBlock
+                    Canvas.Top="80"
+                    FontWeight="Bold"
+                    Text="Router" />
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DragOver">
+                        <i:InvokeCommandAction Command="{Binding DragOverCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <i:InvokeCommandAction Command="{Binding DropCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Canvas>
 
             <Canvas
                 Grid.Row="0"
                 Grid.Column="3"
                 Width="80"
                 Height="80"
-                Background="AliceBlue" />
+                AllowDrop="True"
+                Background="AliceBlue">
+                <TextBlock
+                    Canvas.Top="80"
+                    FontWeight="Bold"
+                    Text="Router" />
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DragOver">
+                        <i:InvokeCommandAction Command="{Binding DragOverCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <i:InvokeCommandAction Command="{Binding DropCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Canvas>
 
             <Canvas
                 Grid.Row="1"
                 Grid.Column="3"
                 Width="80"
                 Height="80"
-                Background="AliceBlue" />
+                AllowDrop="True"
+                Background="AliceBlue">
+                <TextBlock
+                    Canvas.Top="80"
+                    FontWeight="Bold"
+                    Text="Router" />
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DragOver">
+                        <i:InvokeCommandAction Command="{Binding DragOverCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <i:InvokeCommandAction Command="{Binding DropCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Canvas>
 
             <Canvas
                 Grid.Row="2"
                 Grid.Column="3"
                 Width="80"
                 Height="80"
-                Background="AliceBlue" />
+                AllowDrop="True"
+                Background="AliceBlue">
+                <TextBlock
+                    Canvas.Top="80"
+                    FontWeight="Bold"
+                    Text="Router" />
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="DragOver">
+                        <i:InvokeCommandAction Command="{Binding DragOverCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <i:InvokeCommandAction Command="{Binding DropCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Canvas>
 
 
         </Grid>
