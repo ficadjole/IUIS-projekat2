@@ -71,6 +71,76 @@
             ItemsSource="{Binding CanvasSlots}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
+                    <Grid Background="Yellow">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Grid.Row" Value="{Binding Row}" />
+                    <Setter Property="Grid.Column" Value="{Binding Col}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border>
+                        <Canvas
+                            Width="80"
+                            Height="80"
+                            AllowDrop="True"
+                            Background="AliceBlue"
+                            Tag="{Binding}">
+                            <StackPanel Orientation="Vertical">
+                                <Image
+                                    Width="50"
+                                    Height="50"
+                                    Source="{Binding CanvasServer.Type.UrlImage}" />
+                                <StackPanel Orientation="Horizontal">
+
+                                    <TextBlock
+                                        Canvas.Top="80"
+                                        Margin="0,0,5,0"
+                                        Text="{Binding CanvasServer.Name}" />
+
+                                    <TextBlock Canvas.Top="80" Text="{Binding CanvasServer.Value}" />
+
+                                </StackPanel>
+                            </StackPanel>
+
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Drop">
+                                    <i:InvokeCommandAction Command="{Binding DataContext.DropCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="DragOver">
+                                    <i:InvokeCommandAction Command="{Binding DataContext.DragOverCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DataContext.MouseLeftButtonDownCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Canvas>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!--<ItemsControl
+            Grid.Row="2"
+            Margin="10"
+            ItemsSource="{Binding CanvasSlots}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
                     <UniformGrid
                         Background="Yellow"
                         Columns="4"
@@ -116,7 +186,7 @@
                     </Canvas>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        </ItemsControl>-->
 
 
     </Grid>

@@ -4,6 +4,7 @@ using NetworkService.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -49,9 +50,6 @@ namespace NetworkService.ViewModel
 
         public MyICommand<object> TreeViewDropCommand { get; set; }
 
-        public MyICommand<object> TreeViewDragOverCommand { get; set; }
-
-
 
         public MyICommand<object> DragOverCommand { get; set; }
 
@@ -59,7 +57,8 @@ namespace NetworkService.ViewModel
 
         public MyICommand<object> MouseLeftButtonDownCommand { get; set; }
        
-        public ObservableCollection<Server> CanvasSlots { get; set; }
+
+        public ObservableCollection<CanvasSlot> CanvasSlots { get; set; }
         
         public NetworkDisplayViewModel()
         {
@@ -68,14 +67,13 @@ namespace NetworkService.ViewModel
             web = new ServersByType() { Servers = new ObservableCollection<Server>(), ServerType = new ServerType { Type = Type.WebServer, UrlImage = @"..\..\Resources\Images\WebServer.png" } };
             file = new ServersByType() { Servers = new ObservableCollection<Server>(), ServerType = new ServerType { Type = Type.FileServer, UrlImage = @"..\..\Resources\Images\FileServer.png" } };
             SviServeri = new ObservableCollection<ServersByType>();
-            CanvasSlots = new ObservableCollection<Server>();
+            CanvasSlots = new ObservableCollection<CanvasSlot>();
             LoadCanvas();
             Messenger.Default.Register<ObservableCollection<Server>>(this, LoadServers);
 
             MouseLeftButtonUpCommand = new MyICommand(OnMouseLeftButtonUp);
             SelectedItemChangedCommand = new MyICommand<object>(OnSelectedItemChanged);
             TreeViewDropCommand = new MyICommand<object>(OnTreeViewDropCommand);
-            TreeViewDragOverCommand = new MyICommand<object>(OnTreeViewDragOverCommand);
 
 
             DragOverCommand = new MyICommand<object>(OnDragOverCommand);
@@ -84,10 +82,7 @@ namespace NetworkService.ViewModel
 
         }
 
-        private void OnTreeViewDragOverCommand(object obj)
-        {
-            var nesto = obj;
-        }
+
 
         private void OnTreeViewDropCommand(object obj)
         {
@@ -97,7 +92,7 @@ namespace NetworkService.ViewModel
                 {
                     SviServeri[0].Servers.Add(DraggedItem);
                     
-                    CanvasSlots.Remove(DraggedItem);
+                    //CanvasSlots.Remove(DraggedItem);
                 }
             }
             else if (DraggedItem.Type.Type.Equals(Type.WebServer))
@@ -105,7 +100,7 @@ namespace NetworkService.ViewModel
                 if (SviServeri[1].Servers.Contains(DraggedItem) == false)
                 {
                     SviServeri[1].Servers.Add(DraggedItem);
-                    CanvasSlots.Remove(DraggedItem);
+                    //CanvasSlots.Remove(DraggedItem);
                 }
             }
             else if (DraggedItem.Type.Type.Equals(Type.FileServer))
@@ -113,7 +108,7 @@ namespace NetworkService.ViewModel
                 if (SviServeri[2].Servers.Contains(DraggedItem) == false)
                 {
                     SviServeri[2].Servers.Add(DraggedItem);
-                    CanvasSlots.Remove(DraggedItem);
+                    //CanvasSlots.Remove(DraggedItem);
                 }
             }
 
@@ -122,21 +117,23 @@ namespace NetworkService.ViewModel
 
         private void MouseLeftButtonDownMove(object obj)
         {
-            if (obj != null)
-            {
-                MouseButtonEventArgs e = (MouseButtonEventArgs)obj;
-
                 Canvas canvas = (((obj as MouseEventArgs).Source as Image).Parent as StackPanel).Parent as Canvas;
 
-                if (canvas is Canvas && canvas.Tag is Server server)
+                if (canvas is Canvas && canvas.DataContext is CanvasSlot slot)
                 {
-                    DraggedItem = server;
-                    DragDrop.DoDragDrop(canvas, server, DragDropEffects.Move);
-                    ResetDataCanvas(canvas);
-                    CanvasSlots.Remove(server);
-                }
+                    Server server = slot.CanvasServer;
+                    if (server != null)
+                    {
+                        DraggedItem = server;
+                        DragDrop.DoDragDrop(canvas, server, DragDropEffects.Move);
 
-            }
+                        // Resetuj taj canvas
+                        ResetDataCanvas(canvas);
+
+                        
+                        slot.CanvasServer = null;
+                    }
+                }
 
         }
 
@@ -144,9 +141,8 @@ namespace NetworkService.ViewModel
         {
             if (canvas != null) {
 
-                canvas.DataContext = null;  
+                
                 canvas.Resources.Remove("taken");
-
             }
         }
         
@@ -169,6 +165,8 @@ namespace NetworkService.ViewModel
         {
             Canvas canvas = (obj as DragEventArgs).Source as Canvas;
 
+            CanvasSlot slot = canvas.DataContext as CanvasSlot;
+
             if (DraggedItem != null)
             {
                 if (canvas.Resources["taken"] == null)
@@ -176,9 +174,14 @@ namespace NetworkService.ViewModel
                     canvas.Resources.Add("taken", true);
                     RemoveItemFromCollection(DraggedItem);
                     NekiServer = DraggedItem;
-                    //canvas.DataContext = NekiServer;
                    
-                    CanvasSlots.Add(DraggedItem);
+                   foreach(var item in CanvasSlots)
+                    {
+                        if(item.Col == slot.Col && item.Row == slot.Row)
+                        {
+                            item.CanvasServer = NekiServer;
+                        }
+                    }
 
                 }
                 ResetDragState();
@@ -306,9 +309,17 @@ namespace NetworkService.ViewModel
 
         private void LoadCanvas()
         {
-            for (int i = 0; i < 12; i++)
+            for (int r = 0; r < 3; r++)
             {
-                CanvasSlots.Add(null); // prazni slotovi
+                for (int c = 0; c < 4; c++)
+                {
+                    CanvasSlots.Add(new CanvasSlot
+                    {
+                        CanvasServer = null, // prazno
+                        Row = r,
+                        Col = c
+                    });
+                }
             }
         }
 
@@ -321,6 +332,11 @@ namespace NetworkService.ViewModel
 
             for (int i = 0; i < collection.Count; i++) 
             {
+                if (PostojiUCanvasSlots(collection[i])) { 
+                
+                    continue;
+                
+                }
 
                 if (collection[i].Type.Type.Equals(Type.DatabaseServer))
                 {
@@ -343,5 +359,25 @@ namespace NetworkService.ViewModel
             SviServeri.Add(file);
 
         }
+
+        private bool PostojiUCanvasSlots(Server server)
+        {
+            foreach (var slot in CanvasSlots)
+            {
+                if(slot != null && slot.CanvasServer != null){
+                    if (slot.CanvasServer.Id == server.Id)
+                    {
+
+                        return true;
+
+                    }
+                }
+                
+            }
+        
+            return false;
+
+        }
+        
     }
 }
