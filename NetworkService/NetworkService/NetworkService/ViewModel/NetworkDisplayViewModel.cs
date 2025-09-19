@@ -5,12 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using Type = NetworkService.Model.Type;
 
 namespace NetworkService.ViewModel
@@ -43,12 +46,21 @@ namespace NetworkService.ViewModel
 
         public MyICommand MouseLeftButtonUpCommand { get; set; }
         public MyICommand<object> SelectedItemChangedCommand { get; set; }
-        
+
+        public MyICommand<object> TreeViewDropCommand { get; set; }
+
+        public MyICommand<object> TreeViewDragOverCommand { get; set; }
+
+
+
         public MyICommand<object> DragOverCommand { get; set; }
 
         public MyICommand<object> DropCommand { get; set; }
 
-        private ObservableCollection<Server> CanvasServers { get; set; }
+        public MyICommand<object> MouseLeftButtonDownCommand { get; set; }
+       
+        public ObservableCollection<Server> CanvasSlots { get; set; }
+        
         public NetworkDisplayViewModel()
         {
             
@@ -56,35 +68,117 @@ namespace NetworkService.ViewModel
             web = new ServersByType() { Servers = new ObservableCollection<Server>(), ServerType = new ServerType { Type = Type.WebServer, UrlImage = @"..\..\Resources\Images\WebServer.png" } };
             file = new ServersByType() { Servers = new ObservableCollection<Server>(), ServerType = new ServerType { Type = Type.FileServer, UrlImage = @"..\..\Resources\Images\FileServer.png" } };
             SviServeri = new ObservableCollection<ServersByType>();
-            CanvasServers = new ObservableCollection<Server>();
+            CanvasSlots = new ObservableCollection<Server>();
+            LoadCanvas();
             Messenger.Default.Register<ObservableCollection<Server>>(this, LoadServers);
-        
+
             MouseLeftButtonUpCommand = new MyICommand(OnMouseLeftButtonUp);
             SelectedItemChangedCommand = new MyICommand<object>(OnSelectedItemChanged);
+            TreeViewDropCommand = new MyICommand<object>(OnTreeViewDropCommand);
+            TreeViewDragOverCommand = new MyICommand<object>(OnTreeViewDragOverCommand);
+
+
             DragOverCommand = new MyICommand<object>(OnDragOverCommand);
             DropCommand = new MyICommand<object>(OnDropCommand);
+            MouseLeftButtonDownCommand = new MyICommand<object>(MouseLeftButtonDownMove);
 
+        }
+
+        private void OnTreeViewDragOverCommand(object obj)
+        {
+            var nesto = obj;
+        }
+
+        private void OnTreeViewDropCommand(object obj)
+        {
+            if (DraggedItem.Type.Type.Equals(Type.DatabaseServer))
+            {
+                if (SviServeri[0].Servers.Contains(DraggedItem) == false)
+                {
+                    SviServeri[0].Servers.Add(DraggedItem);
+                    
+                    CanvasSlots.Remove(DraggedItem);
+                }
+            }
+            else if (DraggedItem.Type.Type.Equals(Type.WebServer))
+            {
+                if (SviServeri[1].Servers.Contains(DraggedItem) == false)
+                {
+                    SviServeri[1].Servers.Add(DraggedItem);
+                    CanvasSlots.Remove(DraggedItem);
+                }
+            }
+            else if (DraggedItem.Type.Type.Equals(Type.FileServer))
+            {
+                if (SviServeri[2].Servers.Contains(DraggedItem) == false)
+                {
+                    SviServeri[2].Servers.Add(DraggedItem);
+                    CanvasSlots.Remove(DraggedItem);
+                }
+            }
+
+            ResetDragState();
+        }
+
+        private void MouseLeftButtonDownMove(object obj)
+        {
+            if (obj != null)
+            {
+                MouseButtonEventArgs e = (MouseButtonEventArgs)obj;
+
+                Canvas canvas = (((obj as MouseEventArgs).Source as Image).Parent as StackPanel).Parent as Canvas;
+
+                if (canvas is Canvas && canvas.Tag is Server server)
+                {
+                    DraggedItem = server;
+                    DragDrop.DoDragDrop(canvas, server, DragDropEffects.Move);
+                    ResetDataCanvas(canvas);
+                    CanvasSlots.Remove(server);
+                }
+
+            }
+
+        }
+
+        private void ResetDataCanvas(Canvas canvas)
+        {
+            if (canvas != null) {
+
+                canvas.DataContext = null;  
+                canvas.Resources.Remove("taken");
+
+            }
+        }
+        
+        private Server nekiServer;
+
+        public Server NekiServer
+        {
+            get { return nekiServer; }
+            set
+            {
+                if (nekiServer != value)
+                {
+                    nekiServer = value;
+                    OnPropertyChanged("NekiServer");
+                }
+            }
         }
 
         private void OnDropCommand(object obj)
         {
             Canvas canvas = (obj as DragEventArgs).Source as Canvas;
-            TextBlock textBlock = (TextBlock)(canvas.Children[0]);
 
-            if(DraggedItem != null)
+            if (DraggedItem != null)
             {
                 if (canvas.Resources["taken"] == null)
                 {
-                    BitmapImage image = new BitmapImage();
-                    image.BeginInit();
-                    image.UriSource = new Uri(DraggedItem.Type.UrlImage, UriKind.Relative);
-                    image.EndInit();
-                    canvas.Background = new ImageBrush(image);
-                    textBlock.Text = DraggedItem.Name +"-"+ DraggedItem.Value;
-                    canvas.Resources.Add("token", true);
-                    CanvasServers.Add(DraggedItem);
-                    
-                    //Dodati brisanje iz liste
+                    canvas.Resources.Add("taken", true);
+                    RemoveItemFromCollection(DraggedItem);
+                    NekiServer = DraggedItem;
+                    //canvas.DataContext = NekiServer;
+                   
+                    CanvasSlots.Add(DraggedItem);
 
                 }
                 ResetDragState();
@@ -123,7 +217,7 @@ namespace NetworkService.ViewModel
                 {
                     isDragging = true;
                     DraggedItem = selectedItem;
-                    draggedItemIndex = SviServeri.SelectMany(sbt => sbt.Servers).ToList().IndexOf(DraggedItem);
+                    draggedItemIndex = FindIndexOfSelectedServer(DraggedItem);
                     DragDrop.DoDragDrop(treeView, DraggedItem, DragDropEffects.Move | DragDropEffects.Copy);
 
                 }
@@ -142,9 +236,88 @@ namespace NetworkService.ViewModel
             draggedItem = null;
             draggedItemIndex = -1;
         }
-        private void LoadServers(ObservableCollection<Server> collection)
+
+        private void RemoveItemFromCollection(Server movedServer)
         {
 
+            if (movedServer != null) {
+
+                if (movedServer.Type.Type.Equals(Type.DatabaseServer))
+                {
+
+                    if (SviServeri[0].Servers.Contains(movedServer)) {
+
+                    SviServeri[0].Servers.RemoveAt(draggedItemIndex);
+                       
+                    }
+
+
+
+                }
+                else if (movedServer.Type.Type.Equals(Type.WebServer))
+                {
+                    if (SviServeri[1].Servers.Contains(movedServer))
+                    {
+
+
+                    SviServeri[1].Servers.RemoveAt(draggedItemIndex);
+                    }
+                }
+                else
+                {
+                    if (SviServeri[2].Servers.Contains(movedServer))
+                    {
+
+                    SviServeri[2].Servers.RemoveAt(draggedItemIndex);
+
+                    }
+                }
+            
+            }
+
+        }
+
+        private int FindIndexOfSelectedServer(Server movedServer)
+        {
+            int index = -1;
+
+            if (movedServer != null)
+            {
+
+                if (movedServer.Type.Type.Equals(Type.DatabaseServer))
+                {
+
+                    index = SviServeri[0].Servers.IndexOf(movedServer);
+
+                }
+                else if (movedServer.Type.Type.Equals(Type.WebServer))
+                {
+                    index = SviServeri[1].Servers.IndexOf(movedServer);
+                }
+                else
+                {
+                    index = SviServeri[2].Servers.IndexOf(movedServer);
+                }
+
+            }
+
+            return index;
+        }
+
+        private void LoadCanvas()
+        {
+            for (int i = 0; i < 12; i++)
+            {
+                CanvasSlots.Add(null); // prazni slotovi
+            }
+        }
+
+        private void LoadServers(ObservableCollection<Server> collection)
+        {
+            SviServeri.Clear();
+            dataBase.Servers.Clear();
+            web.Servers.Clear();
+            file.Servers.Clear();
 
             for (int i = 0; i < collection.Count; i++) 
             {
